@@ -1,0 +1,25 @@
+# Py
+__pycache__/
+*.py[cod]
+*$py.class
+
+venv/
+.env/
+.venv/
+
+*.log
+.pytest_cache/
+
+# system files
+.DS_Store
+Thumbs.db
+
+# placeholder
+data/*
+!data/.gitkeep
+
+output/*
+!output/.gitkeep
+
+creds/*
+!creds/.gitkeep 

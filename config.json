@@ -1,0 +1,38 @@
+{
+  "embedding": {
+    "model_name": "gemini-embedding-exp-03-07",
+    "dimension": 3072,
+    "task_type_document": "RETRIEVAL_DOCUMENT",
+    "task_type_query": "RETRIEVAL_QUERY"
+  },
+  "llm": {
+    "model_name": "gemini-2.5-flash",
+    "max_output_tokens": 2048,
+    "temperature": 0.1,
+    "top_results_for_context": 5,
+    "system_instruction": "You are a TTRPG encyclopedia book fed by a vector database. You must answer VERBATIM from the given context. Start with a header using the book and page number (007 becomes Page 7). If no context is found or the question is way off topic, say 'Not found.'."
+  },
+  "chunking": {
+    "max_chunk_tokens": 800,
+    "overlap_tokens": 50,
+    "estimate_chars_per_token": 4
+  },
+  "vector_store": {
+    "index_type": "IP",
+    "similarity_metric": "cosine"
+  },
+  "rate_limiting": {
+    "delay_seconds": 1.0,
+    "max_retries": 3,
+    "backoff_factor": 2.0
+  },
+  "paths": {
+    "data_dir": "./data",
+    "output_dir": "./output",
+    "vector_store_name": "vector_store"
+  },
+  "processing": {
+    "batch_size": 5,
+    "max_pages_per_batch": 50
+  }
+} 

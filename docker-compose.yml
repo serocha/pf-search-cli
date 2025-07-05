@@ -1,0 +1,21 @@
+services:
+  pf-cli:
+    build: .
+    image: pf-cli:latest
+    volumes:
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./config.json:/app/config.json
+      - ./src:/app/src
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    environment:
+      - PYTHONUNBUFFERED=1
+    secrets:
+      - gemini_api_key
+    command: tail -f /dev/null
+
+secrets:
+  gemini_api_key:
+    file: ./creds/api.txt 
