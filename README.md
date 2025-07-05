@@ -6,11 +6,14 @@ A standalone command line interface for processing Pathfinder rulebooks (or any 
 
 This CLI tool processes raw pages and generates embeddings for a FAISS vector database. It's designed for updating or generating new embeddings from your rulebook data, but it does contain search functionality for testing.
 
-## See it in Action
+### A note on embedding
+There are storage, RAM, and compute costs with choosing large vectors, and the results don't necessarily scale.
 
-Visit ______ to try a frontend that searches a vector database created by this tool.
+Switch to 1536-dims for most use cases, or 768-dims for particularly large datasets. Your wallet and server compute will thank you. I used gemini-embedding-exp to generate 3072-dim vectors on two Pathfinder 2E rulebooks, and while I found the results to be quite good, the model was free and my dataset was small.
 
-## How to Use
+Edit the config.json file to change the embedding model, LLM, the number of results returned, and more.
+
+<br>
 
 ```
 cli/
@@ -22,15 +25,17 @@ cli/
 └── run.py          # CLI entrypoint wrapper
 ```
 
+## Setup
+
 ### How to Format Rulebooks
 
 This tool processes files to produce embeddings from cleaned, paginated text. The more nicely organized and clean your files are, the easier it will be for the vector database and optional LLM to retrieve the results you want.
 
 Place each rulebook in a separate folder in `/data/`. Folders are considered unique datasets, e.g. `/data/my_rulebook/` will produce outputs attributed to "my_rulebook". Individual page files should be formatted as `page_XXX.txt`, e.g. `page_001.txt`.
 
-### API Keys
+### API Key
 
-Processing data requires a Google Gemini API key for generating embeddings. The embedding expects 3072 dimensions, which is supported by gemini-embedding-exp. Other APIs may or may not be supported in the future.
+Processing data requires a Google Gemini API key for generating embeddings. The embedding expects 3072 dimensions by default, which is supported by gemini-embedding-exp. Other APIs may or may not be supported in the future.
 
 Docker users must create the following file, which is imported as a Docker secret:
 ```bash
@@ -39,6 +44,8 @@ echo "GEMINI_API_KEY=your-gemini-api-key" > creds/api.txt
 ```
 
 Local users must create the GEMINI_API_KEY environment variable manually.
+
+## Running
 
 ### Docker Usage
 
@@ -63,7 +70,7 @@ docker-compose exec pf-cli python run.py search
 ```
 By default, the container is named _`pf-cli`_.
 
-### Local Development
+### Local
 
 1. Install dependencies:
 ```bash
@@ -82,7 +89,7 @@ python run.py process "Dataset Name"                  # Process all pages
 python run.py search                                  # Search w/ LLM support or raw vector
 ```
 
-## Available Commands
+### Available Commands
 
 - `python run.py list` - List available datasets
 - `python run.py process 'Dataset Name' [start] [end]` - Process pages
@@ -90,23 +97,12 @@ python run.py search                                  # Search w/ LLM support or
 - `python run.py search` - Start AI search terminal (for testing)
 - `python run.py help` - Show help
 
-## Interactive Search
+### Interactive Search
 
 The search terminal supports (for testing purposes):
-- AI-powered search (default): `How do combat rules work?`
+- AI-assisted search (default): `How do combat rules work?`
 - Vector search only: `raw combat rules`
 - Filtered searches: `combat --type=rules --k=5`
 - Help: `help`
 - Statistics: `stats`
 
-## Embeddings
-
-gemini-embedding-exp was used to generate 3072-dim vectors on two Pathfinder 2E rulebooks.
-I found the results to be quite good, but there are a few considerations to be aware of.
-At the time of writing, the above experimental model was free to use and my dataset was small.
-There are storage, RAM, and compute costs with choosing large vectors, and it doesn't necessarily scale with results.
-You're fine using 1536-dims for most cases, or 768-dims for particularly large datasets.
-
-## Changing Settings
-
-Edit the config.json file to change the embedding model used, LLM model, and all sorts of context settings.
